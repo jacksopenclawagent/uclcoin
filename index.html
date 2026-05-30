@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UCL Coin — UEFA Champions League</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #f5c842;
+      --gold-dim: #c9973a;
+      --blue: #0a1628;
+      --blue-mid: #112240;
+      --blue-light: #1e3a6e;
+      --white: #f0f4ff;
+      --muted: rgba(240,244,255,0.5);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--blue);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND STARS ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(245,200,66,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(30,58,110,0.4) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    section, nav, footer { position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid rgba(245,200,66,0.1);
+      backdrop-filter: blur(10px);
+      position: sticky; top: 0;
+      background: rgba(10,22,40,0.85);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.2rem; font-weight: 800; letter-spacing: 0.05em;
+      color: var(--gold);
+    }
+
+    .nav-logo .star { font-size: 1.4rem; }
+
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--blue);
+      border: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,200,66,0.3); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,200,66,0.1);
+      border: 1px solid rgba(245,200,66,0.3);
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* UCL COIN EMBLEM */
+    .coin-emblem {
+      width: 160px; height: 160px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .coin-outer {
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(var(--gold), #c9973a, var(--gold), #e8b830, var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 60px rgba(245,200,66,0.35), 0 0 120px rgba(245,200,66,0.1);
+      animation: spin-slow 20s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { box-shadow: 0 0 60px rgba(245,200,66,0.35), 0 0 120px rgba(245,200,66,0.1); }
+      50% { box-shadow: 0 0 80px rgba(245,200,66,0.5), 0 0 160px rgba(245,200,66,0.15); }
+      to { box-shadow: 0 0 60px rgba(245,200,66,0.35), 0 0 120px rgba(245,200,66,0.1); }
+    }
+
+    .coin-inner {
+      width: 136px; height: 136px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #112240, #0a1628);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .coin-inner .stars-row { font-size: 0.55rem; letter-spacing: 2px; color: var(--gold); }
+    .coin-inner .coin-symbol { font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -1px; }
+    .coin-inner .coin-sub { font-size: 0.5rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .gold { color: var(--gold); }
+
+    .hero p.subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .hero-buttons {
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--blue);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(245,200,66,0.35); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(240,244,255,0.2);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-stats {
+      display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;
+    }
+
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 1.8rem; font-weight: 900; color: var(--gold); }
+    .hero-stat .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+    /* ── SECTION DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,200,66,0.2), transparent);
+      margin: 0 40px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .section { padding: 80px 20px; max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 56px;
+    }
+
+    .flywheel {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .flywheel { grid-template-columns: 1fr; }
+      .flywheel-arrow { transform: rotate(90deg); }
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+    }
+
+    .flywheel-card {
+      background: var(--blue-mid);
+      border: 1px solid rgba(245,200,66,0.15);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .flywheel-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+
+    .flywheel-card .card-icon { font-size: 2.4rem; margin-bottom: 14px; display: block; }
+    .flywheel-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--gold); }
+    .flywheel-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    .flywheel-arrow {
+      font-size: 1.6rem;
+      color: var(--gold);
+      text-align: center;
+      opacity: 0.6;
+    }
+
+    /* ── PREDICTION COINS ── */
+    .coins-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) { .coins-grid { grid-template-columns: 1fr; } }
+
+    .coin-card {
+      background: var(--blue-mid);
+      border-radius: 20px;
+      padding: 32px;
+      border: 1px solid rgba(245,200,66,0.1);
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coin-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      opacity: 0.06;
+    }
+
+    .coin-card.arsenal::before { background: #cc0000; }
+    .coin-card.psg::before { background: #004170; }
+    .coin-card.arsenal { border-color: rgba(204,0,0,0.2); }
+    .coin-card.psg { border-color: rgba(0,65,112,0.4); }
+    .coin-card:hover { transform: translateY(-4px); }
+    .coin-card.arsenal:hover { border-color: rgba(204,0,0,0.5); }
+    .coin-card.psg:hover { border-color: rgba(0,150,255,0.4); }
+
+    .coin-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .arsenal .coin-badge { background: rgba(204,0,0,0.15); color: #ff4444; border: 1px solid rgba(204,0,0,0.3); }
+    .psg .coin-badge { background: rgba(0,100,200,0.15); color: #4499ff; border: 1px solid rgba(0,100,200,0.3); }
+
+    .coin-card .club-icon { font-size: 3.5rem; display: block; margin-bottom: 12px; }
+    .coin-card h3 { font-size: 1.3rem; font-weight: 900; margin-bottom: 8px; }
+    .coin-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+
+    .coin-fee {
+      background: rgba(245,200,66,0.08);
+      border: 1px solid rgba(245,200,66,0.2);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ── TOKENOMICS ── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .token-stat {
+      background: var(--blue-mid);
+      border: 1px solid rgba(245,200,66,0.1);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .token-stat:hover { border-color: rgba(245,200,66,0.3); }
+    .token-stat .t-num { font-size: 1.6rem; font-weight: 900; color: var(--gold); }
+    .token-stat .t-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; line-height: 1.4; }
+
+    /* ── TONIGHT ── */
+    .tonight-box {
+      background: linear-gradient(135deg, #1a0a0a, #0a1628, #0a2010);
+      border: 1px solid rgba(245,200,66,0.25);
+      border-radius: 20px;
+      padding: 48px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tonight-box::before {
+      content: '🏆';
+      position: absolute;
+      font-size: 12rem;
+      opacity: 0.04;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .tonight-box .match {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+
+    .match-team { text-align: center; }
+    .match-team .team-icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+    .match-team .team-name { font-size: 1rem; font-weight: 800; }
+    .match-team .team-coin { font-size: 0.72rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.08em; }
+
+    .match-vs {
+      font-family: Impact, sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .match-info {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .countdown-label {
+      display: inline-block;
+      background: rgba(245,200,66,0.1);
+      border: 1px solid rgba(245,200,66,0.3);
+      color: var(--gold);
+      border-radius: 50px;
+      padding: 6px 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(245,200,66,0.1);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0 auto 8px;
+    }
+
+    .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.78rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span class="star">⭐</span> UCL COIN
+    </div>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#predict">Predict</a>
+      <a href="#tokenomics">Tokenomics</a>
+    </div>
+    <button class="nav-cta">Buy UCL</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      UCL Final Night — Live Predictions Open
+    </div>
+
+    <div class="coin-emblem">
+      <div class="coin-outer">
+        <div class="coin-inner">
+          <span class="stars-row">★ ★ ★ ★ ★</span>
+          <span class="coin-symbol">UCL</span>
+          <span class="coin-sub">Champions</span>
+        </div>
+      </div>
+    </div>
+
+    <h1>The Coin of<br/><span class="gold">Champions</span></h1>
+
+    <p class="subtitle">
+      UCL Coin powers a prediction ecosystem around the UEFA Champions League Final.
+      Every bet placed on Arsenal or PSG coins generates fees that flow directly back into UCL — fuelling the flywheel.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn-primary">🏆 Buy UCL Coin</button>
+      <button class="btn-secondary">📖 Read Whitepaper</button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">2%</div>
+        <div class="label">Fee per prediction</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">100%</div>
+        <div class="label">Fees into UCL</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">2</div>
+        <div class="label">Prediction coins</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">Tonight</div>
+        <div class="label">UCL Final</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TONIGHT -->
+  <section class="section" id="predict">
+    <div class="section-label">Tonight's Match</div>
+    <div class="tonight-box">
+      <div class="countdown-label">🔴 Predictions Live Now</div>
+      <h2 style="font-size:2rem; font-weight:900; margin-bottom:8px;">UEFA Champions League Final</h2>
+      <p style="color:var(--muted); font-size:0.9rem;">Allianz Arena, Munich · May 30, 2026 · 20:00 CET</p>
+
+      <div class="match">
+        <div class="match-team">
+          <span class="team-icon">🔴</span>
+          <div class="team-name">Arsenal</div>
+          <div class="team-coin">$ARS Coin</div>
+        </div>
+        <div class="match-vs">VS</div>
+        <div class="match-team">
+          <span class="team-icon">🔵</span>
+          <div class="team-name">PSG</div>
+          <div class="team-coin">$PSG Coin</div>
+        </div>
+      </div>
+
+      <p style="color:var(--muted); font-size:0.88rem; max-width:500px; margin:0 auto 28px;">
+        Buy <strong style="color:#ff4444;">$ARS</strong> to predict Arsenal win. Buy <strong style="color:#4499ff;">$PSG</strong> to predict PSG win.
+        All transaction fees flow into <strong style="color:var(--gold);">$UCL</strong> — the coin that wins regardless of the result.
+      </p>
+
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn-primary" style="background:#cc0000; color:#fff;">🔴 Buy $ARS — Arsenal Win</button>
+        <button class="btn-primary" style="background:#004aad; color:#fff;">🔵 Buy $PSG — PSG Win</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="section-label">The Flywheel</div>
+    <div class="section-title">How UCL Coin Works</div>
+    <div class="section-sub">A self-reinforcing ecosystem. Every prediction drives fees. Every fee strengthens UCL. The more people predict, the more powerful the coin becomes.</div>
+
+    <div class="flywheel">
+      <div class="flywheel-card">
+        <span class="card-icon">🎯</span>
+        <h3>Predict</h3>
+        <p>Users buy $ARS or $PSG coins to predict the winner of the UCL Final. Each transaction carries a 2% fee.</p>
+      </div>
+      <div class="flywheel-arrow">→</div>
+      <div class="flywheel-card">
+        <span class="card-icon">⚙️</span>
+        <h3>Fee Collection</h3>
+        <p>All prediction fees are automatically collected by the UCL smart contract — from both $ARS and $PSG activity.</p>
+      </div>
+      <div class="flywheel-arrow">→</div>
+      <div class="flywheel-card">
+        <span class="card-icon">🏆</span>
+        <h3>UCL Flywheel</h3>
+        <p>100% of fees are flywheeled back into $UCL — buying and burning supply, increasing scarcity and value.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PREDICTION COINS -->
+  <section class="section">
+    <div class="section-label">Ecosystem Coins</div>
+    <div class="section-title">Pick Your Side</div>
+    <div class="section-sub">Two prediction coins. One winner on the pitch. But every trade on either coin feeds the same flywheel — $UCL wins either way.</div>
+
+    <div class="coins-grid">
+      <div class="coin-card arsenal">
+        <span class="coin-badge">Prediction Coin</span>
+        <span class="club-icon">🔴</span>
+        <h3>$ARS — Arsenal</h3>
+        <p>Back the Gunners to lift the Champions League trophy tonight in Munich. $ARS holders win if Arsenal are crowned champions of Europe.</p>
+        <div class="coin-fee">2% fee → flywheeled into $UCL</div>
+      </div>
+      <div class="coin-card psg">
+        <span class="coin-badge">Prediction Coin</span>
+        <span class="club-icon">🔵</span>
+        <h3>$PSG — Paris Saint-Germain</h3>
+        <p>Back PSG to claim their first ever Champions League title. $PSG holders win if Paris triumph in the final tonight.</p>
+        <div class="coin-fee">2% fee → flywheeled into $UCL</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TOKENOMICS -->
+  <section class="section" id="tokenomics">
+    <div class="section-label">Tokenomics</div>
+    <div class="section-title">$UCL Token Structure</div>
+    <div class="section-sub">Designed for scarcity. Every prediction event burns supply. The ecosystem grows — the coin grows with it.</div>
+
+    <div class="token-grid">
+      <div class="token-stat">
+        <div class="t-num">1B</div>
+        <div class="t-label">Total Supply</div>
+      </div>
+      <div class="token-stat">
+        <div class="t-num">2%</div>
+        <div class="t-label">Fee on Every Prediction Trade</div>
+      </div>
+      <div class="token-stat">
+        <div class="t-num">100%</div>
+        <div class="t-label">Fees Reinvested into UCL</div>
+      </div>
+      <div class="token-stat">
+        <div class="t-num">0%</div>
+        <div class="t-label">Team Allocation</div>
+      </div>
+      <div class="token-stat">
+        <div class="t-num">Deflationary</div>
+        <div class="t-label">Buy & Burn Mechanism</div>
+      </div>
+      <div class="token-stat">
+        <div class="t-num">SOL</div>
+        <div class="t-label">Built on Solana</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">⭐ UCL COIN</div>
+    <p>UCL Coin is a fan-made prediction token built around the UEFA Champions League. Not affiliated with UEFA or any football club.</p>
+    <p>Crypto assets are highly volatile. Only invest what you can afford to lose.</p>
+    <div class="footer-links">
+      <a href="#">Twitter / X</a>
+      <a href="#">Telegram</a>
+      <a href="#">Whitepaper</a>
+      <a href="#">Contract</a>
+    </div>
+  </footer>
+
+</body>
+</html>
